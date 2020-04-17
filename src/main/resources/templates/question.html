@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${question.title}"></title>
+    <title>生活社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/editormd.preview.min.css" />
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/editormd.min.js"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div th:insert="~{navigation.html :: nav}"></div>
+    <!-- /.container-fluid -->
+    <div class="container-fluid  public-container">
+        <div class="row main">
+            <div class="col-lg-9 col-md-12 	col-xs-12 col-sm-12 ">
+                <div class="col-lg-12 col-md-12 	col-xs-12 col-sm-12 ">
+                    <h2><span aria-hidden="true" th:text="${question.title}"></span></h2>
+                    <hr>
+                    <div class="comment-warper">
+                        <p class="catch" th:text="${question.user.name}"></p><span
+                            class="catch">·&nbsp;&nbsp;&nbsp;|</span>
+                        <p class="catch" th:text="${question.viewCount}"></p><span
+                            class="catch">个观看·&nbsp;&nbsp;&nbsp;|</span>
+                        <p class="catch" th:text="${question.likeCount}"></p><span class="catch">个人喜欢·&nbsp;&nbsp;&nbsp;|</span>
+                        <p class="catch" th:text="${#dates.format(question.gmtCreate,'yyyy-MMMM-dd HH:mm')}"></p>
+                    </div>
+                    <hr>
+                    <div class="col-lg-12 col-md-12 	col-xs-12 col-sm-12 " id="test-markdown-view">
+                        <textarea  th:text="${question.description}" style="display:none;"></textarea>
+                    </div>
+                    <script type="text/javascript">
+                        $(function() {
+                            var testView = editormd.markdownToHTML("test-markdown-view", {});
+                        });
+                    </script>
+                    <hr>
+                    <div class="col-lg-12 col-md-12 	col-xs-12 col-sm-12 ">
+                        <div class=" label label-info label-right" th:each=" tag: ${question.tag.split(',')}">
+                            <span class="glyphicon glyphicon-tags"></span>
+                            <div class="label label-info" th:text="${tag}"></div>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <hr>
+                    <a th:href="@{'/public/'+${question.id}}"
+                       th:if="${session.user !=null&& question.creator==session.user.id}">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                    </a>
+                </div>
+                <hr class="col-lg-12 col-md-12 	col-xs-12 col-sm-12 ">
+                <div class="col-lg-12 col-md-12 	col-xs-12 col-sm-12 " id="reply">
+                    <span th:text="${question.commentCount}"></span>个回复
+                    <div class="media" th:each=" comment : ${comments}">
+                        <div class="media-left img-warper">
+                            <a href="#">
+                                <img class="media-object img-rounded img-warper" th:src="${comment.user.avatarUrl}"
+                                     alt="...">
+                            </a>
+                        </div>
+                        <div class="media-body ">
+                            <h4 class="media-heading"><a th:href="@{/question(id=${question.id})}"
+                                                         th:text="${comment.user.name}"></a></h4>
+                            <div th:text="${comment.content}"></div>
+                            <div class="menu">
+                                <span class="glyphicon glyphicon-thumbs-up icon icon-right"></span>
+                                <span class="glyphicon glyphicon-comment icon comment-reply" data-number="0"
+                                      th:id="'comment-reply'+${comment.id}" th:data-id="${comment.id}"
+                                      onclick="comment(this)"><span th:text="${comment.commentCount}"></span></span>
+                                <span class="data-location"
+                                      th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                            </div>
+                            <!--二级评论-->
+                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 collapse reply-warper"
+                                 th:id="'comment-'+${comment.id}">
+                                <div class="media" th:id="two-comment+${comment.id}">
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <hr>
+                    <!- 回复-->
+                    <div>
+                        <div class="media">
+                            <div class="media-left img-warper">
+                                <a href="#">
+                                    <img class="media-object img-rounded img-warper" th:src="${session.user}==null? '/images/hide-name.png': ${session.user.avatarUrl}"
+                                         alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span
+                                        th:text="${session.user}==null?'匿名用户':${session.user.name}"></span></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="hidden" id="parentId" th:value="${question.id}">
+                        <textarea class="form-control" rows="3" id="content"></textarea>
+                        <button class="btn btn-success data-location" onclick="post()">回复</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-12 	col-xs-12 col-sm-12 ">
+                <h4><span class="glyphicon glyphicon-list-alt" aria-hidden="true">发起人</span></h4>
+                <hr>
+                <div class="media">
+                    <div class="media-left img-warper">
+                        <a href="#">
+                            <img class="media-object img-rounded img-warper" th:src="${question.user.avatarUrl}"
+                                 alt="...">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><a th:href="@{/question(id=${question.id})}"
+                                                     th:text="${question.user.name}"></a></h4>
+                    </div>
+                </div>
+                <h4><span class="glyphicon glyphicon-list-alt" aria-hidden="true">相关问题</span></h4>
+                <div class="col-lg-12 col-md-12 	col-xs-12 col-sm-12">
+                    <ul>
+                        <li th:each="related:${relateds}">
+                            <a   th:href="@{'/question/'+ ${related.id}}" th:text="${related.title}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/community.js"></script>
+</nav>
+
+</body>
+</html>

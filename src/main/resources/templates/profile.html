@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div th:insert="~{navigation.html :: nav}"></div>
+        <div>
+            <div class="container-fluid  public-container ">
+                <div class="row main" >
+                    <div class="col-lg-9 col-md-12 	col-xs-12 col-sm-12 ">
+                        <h2  th:if="'questions' == ${section}"><span class="glyphicon glyphicon-list-alt " aria-hidden="true">我的问题</span></h2>
+                        <h2  th:if="'replies' == ${section}"><span class="glyphicon glyphicon-list-alt " aria-hidden="true">我的通知</span></h2>
+                        <hr>
+                        <div class="media" th:each="question : ${questions}" th:if="'questions' == ${section}">
+                            <div class="media-left img-warper">
+                                <a th:href="@{/question(id=${question.user.id})}">
+                                    <img class="media-object img-warper"  th:src="${question.user.avatarUrl}"  alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body" >
+                                <h4 class="media-heading" ><a  th:href="@{'/question/'+ ${question.id}}" th:text="${question.title}"></a></h4>
+                                <p th:text="${question.description}"></p>
+                                <div class="comment-warper">
+                                    <p class="catch" th:text="${question.commentCount}" ></p>个评论·&nbsp;&nbsp;&nbsp;
+                                    <p class="catch" th:text="${question.viewCount}"></p>个观看·&nbsp;&nbsp;&nbsp;
+                                    <p class="catch" th:text="${question.likeCount}"></p>个人喜欢·&nbsp;&nbsp;&nbsp;
+                                    <p class="catch" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media" th:each="notification : ${notifications}" th:if="'replies' == ${section}">
+                            <input type="hidden" name="clearNotify">
+                            <div class="media-body">
+                                <span th:text="${notification.notifierName}"></span>回复了<a th:href="@{'/question/'+${notification.outerId}(notifyId=${notification.id})}"  th:text="${notification.outerTitle}"></a>
+                                <span th:if="${notification.status==0}" class="btn btn-warning btn-sm">未读</span>
+                                <hr>
+                            </div>
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a th:if="${currentPage}!=0" href="/frist?currentPage=0" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li><a th:if="${currentPage}-2>=0" th:href="@{/profile/(currentPage=${currentPage}-2)}" th:text="${currentPage}-1"></a></li>
+                                <li><a th:if="${currentPage}-1>=0" th:href="@{/profile/(currentPage=${currentPage}-1)}" th:text="${currentPage}"></a></li>
+                                <li><a  th:if="${currentPage}>=0" th:href="@{/profile/(currentPage=${currentPage})}" th:text="${currentPage}+1" ></a></li>
+                                <li><a th:if="${currentPage}+1<${pageSum}"   th:href="@{/profile/(currentPage=${currentPage}+1)}" th:text="${currentPage}+2"></a></li>
+                                <li><a th:if="${currentPage}+2<${pageSum}" th:href="@{/profile/(currentPage=${currentPage}+2)}" th:text="${currentPage}+3"></a></li>
+                                <li>
+                                    <a th:if="${currentPage}>=${pageSum}-1 and (${pageSum}-1)>=0" th:href="@{/profile/(currentPage=${pageSum}-1)}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-12 	col-xs-12 col-sm-12 " >
+                        <div class="list-group section">
+                            <a href="/profile/questions"
+                               th:class="${section == 'questions'}? 'active list-group-item' : 'list-group-item'">我的问题</a>
+                            <a href="/profile/replies"
+                               th:class="${section == 'replies'}? 'active list-group-item' : 'list-group-item'">
+                                最新回复
+                                <span class="badge" th:if="${noRead}!=0" th:text="${noRead}"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    </nav>
+    </div>
+        </div>
+    </nav>
+</body>
+</html>

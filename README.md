@@ -7,4 +7,4 @@
 
 [文档]()
 
-[文档]()
+[flyway指令](mvn flyway:migrate)
