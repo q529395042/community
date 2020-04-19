@@ -4,9 +4,7 @@ import com.ch.community.dto.CommentCreateDTO;
 import com.ch.community.dto.ResultDTO;
 import com.ch.community.enums.CommentTypeEnum;
 import com.ch.community.exception.CustomizeErrorCode;
-import com.ch.community.exception.CustomizeException;
 import com.ch.community.model.Comment;
-import com.ch.community.model.Member;
 import com.ch.community.model.User;
 import com.ch.community.service.CommentService;
 import com.ch.community.tool.GeneralTools;
@@ -15,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Type;
 
 @Controller
 public class CommentController {

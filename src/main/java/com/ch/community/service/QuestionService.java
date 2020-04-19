@@ -54,7 +54,7 @@ public class QuestionService {
     public List<QuestionDTO> getProfileQuestionList(Integer id,Integer pageCount,Integer currentPage) {
         PagesDTO pagesDTO = new PagesDTO();
         QuestionExample questionExample=new QuestionExample();
-        questionExample.createCriteria().andIdEqualTo(id);
+        questionExample.createCriteria().andCreatorEqualTo(id);
 
         RowBounds rowBounds=new RowBounds(pageCount,currentPage);
         List<Question> questionList =questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample,rowBounds);

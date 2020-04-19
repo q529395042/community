@@ -2,10 +2,7 @@ package com.ch.community.controller;
 
 import com.ch.community.dto.ResultDTO;
 import com.ch.community.exception.CustomizeErrorCode;
-import com.ch.community.mapper.MemberMapper;
 import com.ch.community.mapper.UserMapper;
-import com.ch.community.model.Member;
-import com.ch.community.model.MemberExample;
 import com.ch.community.model.User;
 import com.ch.community.model.UserExample;
 import org.apache.commons.lang3.StringUtils;
@@ -27,8 +24,6 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private MemberMapper memberMapper;
 
     @GetMapping("/login")
     public String login(){

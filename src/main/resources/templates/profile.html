@@ -58,7 +58,7 @@
                                 <li><a th:if="${currentPage}+1<${pageSum}"   th:href="@{/profile/(currentPage=${currentPage}+1)}" th:text="${currentPage}+2"></a></li>
                                 <li><a th:if="${currentPage}+2<${pageSum}" th:href="@{/profile/(currentPage=${currentPage}+2)}" th:text="${currentPage}+3"></a></li>
                                 <li>
-                                    <a th:if="${currentPage}>=${pageSum}-1 and (${pageSum}-1)>=0" th:href="@{/profile/(currentPage=${pageSum}-1)}" aria-label="Next">
+                                    <a th:if="${currentPage}+2<${pageSum}"  th:href="@{/profile/(currentPage=${pageSum}-1)}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>

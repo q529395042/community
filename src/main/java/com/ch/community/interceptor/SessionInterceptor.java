@@ -1,13 +1,9 @@
 package com.ch.community.interceptor;
 
-import com.ch.community.dto.ResultDTO;
 import com.ch.community.enums.NotificationStatusEnum;
-import com.ch.community.exception.CustomizeErrorCode;
-import com.ch.community.mapper.MemberMapper;
 import com.ch.community.mapper.NotificationMapper;
 import com.ch.community.mapper.UserMapper;
 import com.ch.community.model.*;
-import com.ch.community.tool.GeneralTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -27,8 +23,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private NotificationMapper notificationMapper;
 
-    @Autowired
-    private MemberMapper memberMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse response, Object handler) throws Exception {

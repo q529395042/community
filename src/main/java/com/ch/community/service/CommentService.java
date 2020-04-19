@@ -10,7 +10,6 @@ import com.ch.community.exception.CustomizeErrorCode;
 import com.ch.community.exception.CustomizeException;
 import com.ch.community.mapper.*;
 import com.ch.community.model.*;
-import com.ch.community.tool.GeneralTools;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,11 +33,8 @@ public class CommentService {
     @Autowired
     private NotificationMapper notificationMapper;
 
-    @Autowired
-    private MemberMapper memberMapper;
 
-    @Autowired
-    private GeneralTools generalTools;
+
 
     @Transactional
     public ResultDTO insert(Comment comment,User user){
